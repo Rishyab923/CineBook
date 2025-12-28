@@ -1,15 +1,19 @@
 import app from "./app";
-import { config } from "./config/config";
 import connectDB from "./config/db";
 
 const startServer = async () => {
-  const port = config.port;
+  try {
+    const PORT = process.env.PORT || 9000;
 
-  await connectDB();
+    await connectDB();
 
-  app.listen(port, () => {
-    console.log(`Listening on port: ${port}`);
-  });
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1);
+  }
 };
 
 startServer();
