@@ -1,16 +1,16 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { Request, Response } from "express";
-import router from "./routes";
-import { globalErrorHandler } from "./middlewares/error.middleware";
+
 import routes from "./routes";
+import { globalErrorHandler } from "./middlewares/error.middleware";
 
 dotenv.config();
 
 const app = express();
 
+// Middlewares
 app.use(
   cors({
     credentials: true,
@@ -20,17 +20,15 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-// All Routes
-app.use("/api/v1/", router);
+// Routes
+app.use("/api/v1", routes);
 
-app.use("/api", routes);
-
-// Global error handler (MUST be after all routes)
-app.use(globalErrorHandler);
-
+// Health check (keep BEFORE error handler)
 app.get("/", (_req: Request, res: Response) => {
   res.send("API is running");
 });
-});
+
+// Global error handler (MUST be last)
+app.use(globalErrorHandler);
 
 export default app;
