@@ -13,10 +13,23 @@ const app = express();
 // Middlewares
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://bms-frontend-dghx.onrender.com"
-    ],
+    origin: (origin, callback) => {
+      // allow server-to-server or tools like curl/postman
+      if (!origin) return callback(null, true);
+
+      // allow localhost (dev)
+      if (origin === "http://localhost:5173") {
+        return callback(null, true);
+      }
+
+      // allow ALL Render frontends
+      if (origin.endsWith(".onrender.com")) {
+        return callback(null, true);
+      }
+
+      // otherwise block
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
