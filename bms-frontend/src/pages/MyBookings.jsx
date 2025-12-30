@@ -100,7 +100,7 @@ const MyBookings = () => {
                 <div className="bg-gradient-to-r from-purple-700 to-purple-500 text-white p-5 flex items-center gap-3">
                   <MdMovie className="text-3xl text-yellow-300" />
                   <h3 className="text-xl sm:text-2xl font-bold">
-                    {booking.movie}
+                    {booking.movie?.title}
                   </h3>
                 </div>
 
@@ -108,7 +108,7 @@ const MyBookings = () => {
                 <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm sm:text-base">
                   <p><b>Name:</b> {booking.user.name}</p>
                   <p><b>Email:</b> {booking.user.email}</p>
-                  <p><b>Theater:</b> {booking.theater}</p>
+                  <p><b>Theater:</b> {booking.theater?.name}</p>
                   <p><b>Date:</b> {booking.showDate}</p>
                   <p><b>Show Time:</b> {booking.showTime}</p>
                   <p>

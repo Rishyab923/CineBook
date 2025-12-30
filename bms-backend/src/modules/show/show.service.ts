@@ -1,3 +1,4 @@
+
 import { Types } from "mongoose";
 import { generateSeatLayout, groupShowsByTheaterAndMovie } from "../../utils";
 import { IShow } from "./show.interface";
@@ -68,4 +69,3 @@ export const updateSeatStatus = async (
     }
   );
 };
-

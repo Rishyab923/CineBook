@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as BookingService from "./booking.service";
+import mongoose from "mongoose";
 
 export const createBooking = async (
   req: Request,
@@ -11,17 +12,20 @@ export const createBooking = async (
       user,
       movie,
       theater,
+      showId,
       showDate,
       showTime,
       seats,
       amount,
     } = req.body;
 
+    // ✅ STRICT VALIDATION
     if (
       !user?.name ||
       !user?.email ||
       !movie ||
       !theater ||
+      !showId ||
       !showDate ||
       !showTime ||
       !seats?.length ||
@@ -34,17 +38,20 @@ export const createBooking = async (
       return;
     }
 
+    // ✅ Convert seats to string format
     const formattedSeats: string[] = seats.map((seat: any) =>
       typeof seat === "string" ? seat : `${seat.row}${seat.number}`
     );
 
+    // ✅ CONVERT IDS TO ObjectId
     const bookingPayload = {
       user: {
         name: user.name,
         email: user.email,
       },
-      movie,
-      theater,
+      movie: new mongoose.Types.ObjectId(movie),
+      theater: new mongoose.Types.ObjectId(theater),
+      showId: new mongoose.Types.ObjectId(showId),
       showDate,
       showTime,
       seats: formattedSeats,
@@ -59,10 +66,11 @@ export const createBooking = async (
       data: booking,
     });
   } catch (error: any) {
+    console.error("BOOKING ERROR:", error.message);
+
     res.status(500).json({
       success: false,
-      message: "Booking failed",
-      error: error?.message,
+      message: error.message || "Booking failed",
     });
   }
 };

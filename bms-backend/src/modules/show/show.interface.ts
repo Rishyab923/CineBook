@@ -1,5 +1,4 @@
 import { Types } from "mongoose";
-
 export interface IShow {
   _id?: string;
   movie: Types.ObjectId;
@@ -9,14 +8,18 @@ export interface IShow {
   audioType?: string;
   startTime: string;
   date: string;
-  priceMap: Record<string, number>;
+
+  priceMap: Record<"PREMIUM" | "EXECUTIVE" | "NORMAL", number>;
+
   seatLayout: {
     row: string;
+    category: "PREMIUM" | "EXECUTIVE" | "NORMAL";
     seats: {
       number: number;
       status: "AVAILABLE" | "BOOKED" | "BLOCKED";
     }[];
   }[];
+
   createdAt?: Date;
   updatedAt?: Date;
 }

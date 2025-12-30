@@ -7,14 +7,33 @@ const bookingSchema = new Schema<IBooking>(
       name: { type: String, required: true },
       email: { type: String, required: true },
     },
-    movie: { type: String, required: true },
-    theater: { type: String, required: true },
-    showDate: { type: String, required: true },
-    showTime: { type: String, required: true },
-    seats: {
-      type: [String], // ["E2","E4"]
+
+    movie: {
+      type: Schema.Types.ObjectId,
+      ref: "Movie",
       required: true,
     },
+
+    theater: {
+      type: Schema.Types.ObjectId,
+      ref: "Theater",
+      required: true,
+    },
+
+    showId: {
+      type: Schema.Types.ObjectId,
+      ref: "Show",
+      required: true,
+    },
+
+    showDate: { type: String, required: true },
+    showTime: { type: String, required: true },
+
+    seats: {
+      type: [String],
+      required: true,
+    },
+
     amount: { type: Number, required: true },
   },
   { timestamps: true }

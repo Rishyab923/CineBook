@@ -79,46 +79,48 @@ export const movies = [
     votes: "15.2K",
     img: m5,
   },
-  //  {
-  //     "id": 6,
-  //     "title": "M3GAN 2.0",
-  //     "genre": "Horror/Sci-Fi/Thriller",
-  //     "rating": 8.4,
-  //     "votes": "117",
-  //     "img": m6
-  //   },
-  //   {
-  //     "id": 7,
-  //     "title": "Housefull 5",
-  //     "genre": "Comedy/Thriller",
-  //     "rating": 6.1,
-  //     "votes": "56.3K",
-  //     "img": m7
-  //   },
-  //   {
-  //     "id": 8,
-  //     "title": "Sitaare Zameen Par",
-  //     "genre": "Comedy/Drama/Sports",
-  //     "rating": 8.5,
-  //     "votes": "39.6K",
-  //     "img": m8
-  //   },
-  //   {
-  //     "id": 9,
-  //     "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
-  //     "genre": "Action/Adventure/Animation/Comedy",
-  //     "rating": 9.6,
-  //     "votes": "51",
-  //     "img": m9
-  //   },
-  //   {
-  //     "id": 10,
-  //     "title": "28 Years Later",
-  //     "genre": "Horror/Thriller",
-  //     "rating": 7.9,
-  //     "votes": "3.7K",
-  //     "img": m10
-  //   }
+  // {
+// //   "id": 6,
+// //   "title": "M3GAN 2.0",
+// //   "genre": "Horror/Sci-Fi/Thriller",
+// //   "rating": 8.4,
+// //   "votes": "117",
+// //   "img": m6
+// // },
+// // {
+// //   "id": 7,
+// //   "title": "Housefull 5",
+// //   "genre": "Comedy/Thriller",
+// //   "rating": 6.1,
+// //   "votes": "56.3K",
+// //   "img": m7
+// // },
+// // {
+// //   "id": 8,
+// //   "title": "Sitaare Zameen Par",
+// //   "genre": "Comedy/Drama/Sports",
+// //   "rating": 8.5,
+// //   "votes": "39.6K",
+// //   "img": m8
+// // },
+// // {
+// //   "id": 9,
+// //   "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
+// //   "genre": "Action/Adventure/Animation/Comedy",
+// //   "rating": 9.6,
+// //   "votes": "51",
+// //   "img": m9
+// // },
+// // {
+// //   "id": 10,
+// //   "title": "28 Years Later",
+// //   "genre": "Horror/Thriller",
+// //   "rating": 7.9,
+// //   "votes": "3.7K",
+// //   "img": m10
+// // }
+
+
 ];
 
 export const allMovies = [

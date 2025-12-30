@@ -3,6 +3,10 @@ import { IMovie } from "../modules/movie/movie.interface";
 import { IShow } from "../modules/show/show.interface";
 import { ITheater } from "../modules/theater/theater.interface";
 
+/* =========================================================
+   TYPES
+========================================================= */
+
 type GroupedShow = {
   movie: Types.ObjectId | IMovie;
   theater: {
@@ -17,69 +21,38 @@ type GroupedShow = {
   };
 };
 
+/* =========================================================
+   VALIDATIONS
+========================================================= */
+
 export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-export const generateSeatLayout = () => {
-  return [
-    {
-      row: "E",
-      type: "PREMIUM",
-      price: 510,
-      seats: Array.from({ length: 10 }, (_, i) => ({
-        number: i + 1,
-        status: "AVAILABLE",
-      })),
-    },
-    {
-      row: "D",
-      type: "EXECUTIVE",
-      price: 290,
-      seats: Array.from({ length: 20 }, (_, i) => ({
-        number: i + 1,
-        status: "AVAILABLE",
-      })),
-    },
-    {
-      row: "C",
-      type: "EXECUTIVE",
-      price: 290,
-      seats: Array.from({ length: 20 }, (_, i) => ({
-        number: i + 1,
-        status: "AVAILABLE",
-      })),
-    },
-    {
-      row: "B",
-      type: "EXECUTIVE",
-      price: 290,
-      seats: Array.from({ length: 20 }, (_, i) => ({
-        number: i + 1,
-        status: "AVAILABLE",
-      })),
-    },
-    {
-      row: "A",
-      type: "NORMAL",
-      price: 180,
-      seats: Array.from({ length: 20 }, (_, i) => ({
-        number: i + 1,
-        status: "AVAILABLE",
-      })),
-    },
-  ];
-};
+/* =========================================================
+   EXPORTS
+========================================================= */
 
-// Grouping function
-export const groupShowsByTheaterAndMovie = (shows: IShow[]): GroupedShow[] => {
+export { generateSeatLayout } from "./generateSeatLayout";
+
+/* =========================================================
+   GROUP SHOWS BY THEATER & MOVIE
+========================================================= */
+
+export const groupShowsByTheaterAndMovie = (
+  shows: IShow[]
+): GroupedShow[] => {
   const grouped: Record<string, GroupedShow> = {};
 
   shows.forEach((show) => {
-    const movieId = show.movie._id;
-    const theatreId = show.theater._id;
-    const key = `${movieId}_${theatreId}`;
+    const movieId =
+      typeof show.movie === "object" ? show.movie._id : show.movie;
+
+    const theaterId =
+      typeof show.theater === "object" ? show.theater._id : show.theater;
+
+    const key = `${movieId}_${theaterId}`;
 
     if (!grouped[key]) {
       grouped[key] = {
@@ -92,11 +65,11 @@ export const groupShowsByTheaterAndMovie = (shows: IShow[]): GroupedShow[] => {
     }
 
     grouped[key].theater.shows.push({
-      _id: show._id ?? "",
-      date: show.date ?? "",
-      startTime: show.startTime ?? "",
-      format: show.format ?? "",
-      audioType: show.audioType ?? "",
+      _id: show._id?.toString() || "",
+      date: show.date || "",
+      startTime: show.startTime || "",
+      format: show.format || "",
+      audioType: show.audioType || "",
     });
   });
 

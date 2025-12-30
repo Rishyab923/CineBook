@@ -35,7 +35,19 @@ const toDateWithTime = (baseDate: Date, timeStr: string) => {
 };
 
 export const seedShow = async () => {
-  const movieIds = ["694fb644064caa53de85915b","694fb644064caa53de85915c","694fb644064caa53de85915d","694fb644064caa53de85915e","694fb644064caa53de85915f","694fb644064caa53de859160","694fb644064caa53de859161","694fb644064caa53de859162","694fb644064caa53de859163","694fb644064caa53de859164"];
+  const movieIds = [
+  "6953927dd978b51382497409",
+  "6953927dd978b5138249740a",
+  "6953927dd978b5138249740b",
+  "6953927dd978b5138249740c",
+  "6953927dd978b5138249740d",
+  "6953927dd978b5138249740d",
+  "6953927dd978b5138249740f",
+  "6953927dd978b51382497410",
+  "6953927dd978b51382497411",
+  "6953927dd978b51382497412"
+]
+
   const movies = await MovieModel.find({ _id: { $in: movieIds } });
   const theatres = await TheaterModel.find({ state: "Karnataka" });
 
