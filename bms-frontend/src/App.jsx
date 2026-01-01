@@ -1,19 +1,24 @@
-import { Routes, Route, useMatch } from "react-router-dom";
+import { Routes, Route, Navigate, useMatch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
 
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import MovieDetails from "./pages/MovieDetails";
-
 import SeatLayout from "./pages/SeatLayout";
 import Checkout from "./pages/Checkout";
-import MyBookings from "./pages/MyBookings";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { token } = useAuth();
+
   // Hide Header & Footer on Seat Layout page
   const isSeatLayoutPage = useMatch(
     "/movies/:movieId/:movieName/:state/theater/:theaterId/show/:showId/seat-layout"
@@ -30,30 +35,42 @@ function App() {
       {/* Main Content */}
       <main className="flex-grow">
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* PUBLIC ROUTES */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-          <Route path="/movies" element={<Movies />} />
+          {/* PROTECTED ROUTES */}
+          <Route
+            path="/"
+            element={token ? <Home /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/profile"
+            element={token ? <Profile /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/movies"
+            element={token ? <Movies /> : <Navigate to="/login" />}
+          />
 
           <Route
             path="/movies/:state/:movieName/:id/ticket"
-            element={<MovieDetails />}
+            element={token ? <MovieDetails /> : <Navigate to="/login" />}
           />
 
-          
           {/* Seat Layout */}
           <Route
             path="/movies/:movieId/:movieName/:state/theater/:theaterId/show/:showId/seat-layout"
-            element={<SeatLayout />}
+            element={token ? <SeatLayout /> : <Navigate to="/login" />}
           />
 
           {/* Checkout */}
           <Route
             path="/shows/:showId/:state/checkout"
-            element={<Checkout />}
+            element={token ? <Checkout /> : <Navigate to="/login" />}
           />
-
-          {/* ✅ My Bookings */}
-          <Route path="/my-bookings" element={<MyBookings />} />
         </Routes>
       </main>
 

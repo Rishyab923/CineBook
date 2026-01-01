@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Booking from "./booking.model";
 import { IBooking } from "./booking.interface";
 import { ShowModel } from "../show/show.model";
@@ -10,7 +11,7 @@ export const createBooking = async (data: IBooking) => {
     throw new Error("Show not found");
   }
 
-  // 🔐 Check seat availability
+  // 🔐 Check already booked seats
   const alreadyBooked: string[] = [];
 
   show.seatLayout.forEach((row) => {
@@ -38,16 +39,17 @@ export const createBooking = async (data: IBooking) => {
     });
   });
 
-  await show.save(); // ✅ save updated seat layout
+  await show.save();
 
-  const booking = await Booking.create(data); // ✅ create booking
-
+  const booking = await Booking.create(data);
   return booking;
 };
 
-export const getBookingsByEmail = async (email: string) => {
-  return Booking.find({ "user.email": email })
-    .populate("movie", "title")      // ✅ fetch movie name
-    .populate("theater", "name")     // ✅ fetch theater name
+export const getBookingsByUserId = async (userId: string) => {
+  return Booking.find({
+    "user.userId": new mongoose.Types.ObjectId(userId),
+  })
+    .populate("movie", "title")
+    .populate("theater", "name")
     .sort({ createdAt: -1 });
 };

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { location, loading, error } = useLocation();
-  const Navigate= useNavigate();
+  const Navigate = useNavigate();
 
   return (
     <div className="w-full text-sm bg-white">
@@ -17,7 +17,7 @@ const Header = () => {
           {/* Left Part */}
           <div className="flex items-center space-x-4">
             <img
-              onClick={()=> Navigate("/")}
+              onClick={() => Navigate("/")}
               src={mainLogo}
               alt="logo"
               className="h-8 object-contain cursor-pointer"
@@ -37,7 +37,6 @@ const Header = () => {
           <div className="flex items-center space-x-6">
             <div className="text-sm font-medium cursor-pointer flex items-center gap-2">
               {loading && <p>Detecting location...</p>}
-
               {error && <p className="text-red-500">{error}</p>}
 
               {location && (
@@ -47,10 +46,6 @@ const Header = () => {
                 </>
               )}
             </div>
-
-            <button className="bg-[#f84464] cursor-pointer text-white px-4 py-1.5 rounded text-sm font-medium">
-              Sign in
-            </button>
           </div>
 
         </div>

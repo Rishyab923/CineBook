@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosWrapper";
+import api from "./axiosWrapper";
 
 /* =======================
    MOVIES
@@ -33,8 +34,10 @@ export const getShowById = (id) =>
    BOOKINGS
 ======================= */
 
-export const createBooking = (data) =>
-  axiosInstance.post("/bookings", data);
+export const createBooking = (payload) =>
+  axiosInstance.post("/bookings", payload);
 
-export const getBookingsByEmail = (email) =>
-  axiosInstance.get(`/bookings/user/${email}`);
+
+export const getMyBookings = () => {
+  return api.get("/bookings/me");
+};

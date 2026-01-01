@@ -8,9 +8,8 @@ const Checkout = () => {
   const { selectedSeats, clearSeats } = useSeat();
   const navigate = useNavigate();
 
+  // ✅ ONLY phone & upi
   const [user, setUser] = useState({
-    name: "",
-    email: "",
     phone: "",
     upi: "",
   });
@@ -20,25 +19,15 @@ const Checkout = () => {
     0
   );
 
-  // ✅ Validation helpers
-  const isValidEmail = (email) => {
-    return email.endsWith("@gmail.com");
-  };
-
+  // ✅ Phone validation
   const isValidPhone = (phone) => {
     return /^[0-9]{10}$/.test(phone);
   };
 
   const handlePayment = async () => {
     // 🔴 Empty check
-    if (!user.name || !user.email || !user.phone || !user.upi) {
-      toast.error("Please fill all details");
-      return;
-    }
-
-    // 🔴 Email validation
-    if (!isValidEmail(user.email)) {
-      toast.error("Email must end with @gmail.com");
+    if (!user.phone || !user.upi) {
+      toast.error("Please enter mobile number and UPI ID");
       return;
     }
 
@@ -57,13 +46,10 @@ const Checkout = () => {
     try {
       const firstSeat = selectedSeats[0];
 
-      // ✅ Correct payload
+      // ✅ FINAL PAYLOAD (user comes from JWT in backend)
       const payload = {
-        user: {
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-        },
+        phone: user.phone,
+        upi: user.upi,
 
         movie: firstSeat.movieId,
         theater: firstSeat.theaterId,
@@ -97,24 +83,7 @@ const Checkout = () => {
           Payment Details
         </h2>
 
-        <input
-          placeholder="Full Name"
-          className="w-full p-3 border rounded-xl"
-          value={user.name}
-          onChange={(e) =>
-            setUser({ ...user, name: e.target.value })
-          }
-        />
-
-        <input
-          placeholder="Email (must end with @gmail.com)"
-          className="w-full p-3 border rounded-xl"
-          value={user.email}
-          onChange={(e) =>
-            setUser({ ...user, email: e.target.value })
-          }
-        />
-
+        {/* MOBILE NUMBER */}
         <input
           placeholder="Mobile Number (10 digits)"
           className="w-full p-3 border rounded-xl"
@@ -128,8 +97,9 @@ const Checkout = () => {
           maxLength={10}
         />
 
+        {/* UPI ID */}
         <input
-          placeholder="PhonePe UPI ID"
+          placeholder="UPI ID (eg: name@upi)"
           className="w-full p-3 border rounded-xl"
           value={user.upi}
           onChange={(e) =>
@@ -139,7 +109,7 @@ const Checkout = () => {
 
         <button
           onClick={handlePayment}
-          className="w-full py-3 bg-purple-700 text-white rounded-xl font-bold"
+          className="w-full py-3 bg-purple-700 text-white rounded-xl font-bold hover:bg-purple-800 transition"
         >
           Pay ₹{totalAmount}
         </button>

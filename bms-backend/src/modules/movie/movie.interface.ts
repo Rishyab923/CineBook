@@ -12,4 +12,3 @@ export interface IMovie {
   votes: number;
   format?: string[];
 }
-

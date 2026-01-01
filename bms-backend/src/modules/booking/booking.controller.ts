@@ -1,15 +1,29 @@
 import { Request, Response, NextFunction } from "express";
-import * as BookingService from "./booking.service";
 import mongoose from "mongoose";
+import * as BookingService from "./booking.service";
+
+interface RequestWithUser extends Request {
+  user: {
+    id: string;
+    email: string;
+    username: string;
+  };
+}
 
 export const createBooking = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): Promise<void> => {
   try {
+    const authReq = req as RequestWithUser;
+
+    if (!authReq.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
     const {
-      user,
       movie,
       theater,
       showId,
@@ -19,10 +33,7 @@ export const createBooking = async (
       amount,
     } = req.body;
 
-    // ✅ STRICT VALIDATION
     if (
-      !user?.name ||
-      !user?.email ||
       !movie ||
       !theater ||
       !showId ||
@@ -38,20 +49,21 @@ export const createBooking = async (
       return;
     }
 
-    // ✅ Convert seats to string format
     const formattedSeats: string[] = seats.map((seat: any) =>
       typeof seat === "string" ? seat : `${seat.row}${seat.number}`
     );
 
-    // ✅ CONVERT IDS TO ObjectId
     const bookingPayload = {
       user: {
-        name: user.name,
-        email: user.email,
+        userId: new mongoose.Types.ObjectId(authReq.user.id),
+        email: authReq.user.email,
+        username: authReq.user.username, // ✅ FROM JWT
       },
+
       movie: new mongoose.Types.ObjectId(movie),
       theater: new mongoose.Types.ObjectId(theater),
       showId: new mongoose.Types.ObjectId(showId),
+
       showDate,
       showTime,
       seats: formattedSeats,
@@ -66,8 +78,6 @@ export const createBooking = async (
       data: booking,
     });
   } catch (error: any) {
-    console.error("BOOKING ERROR:", error.message);
-
     res.status(500).json({
       success: false,
       message: error.message || "Booking failed",
@@ -79,19 +89,17 @@ export const getUserBookings = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  try {
-    const { email } = req.params;
+  const authReq = req as RequestWithUser;
 
-    const bookings = await BookingService.getBookingsByEmail(email);
-
-    res.status(200).json({
-      success: true,
-      data: bookings,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch bookings",
-    });
+  if (!authReq.user) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
   }
+
+  const bookings = await BookingService.getBookingsByUserId(authReq.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: bookings,
+  });
 };

@@ -4,8 +4,19 @@ import { IBooking } from "./booking.interface";
 const bookingSchema = new Schema<IBooking>(
   {
     user: {
-      name: { type: String, required: true },
-      email: { type: String, required: true },
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true, // ✅ STORE USER NAME
+      },
     },
 
     movie: {

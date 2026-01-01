@@ -2,18 +2,19 @@ import { Types } from "mongoose";
 
 export interface IBooking {
   user: {
-    name: string;
+    userId: Types.ObjectId;
     email: string;
+    username: string; // ✅ STORE USER NAME
   };
 
-  movie: Types.ObjectId;     // reference
-  theater: Types.ObjectId;   // reference
-  showId: Types.ObjectId;    // ✅ REQUIRED
+  movie: Types.ObjectId;
+  theater: Types.ObjectId;
+  showId: Types.ObjectId;
 
   showDate: string;
   showTime: string;
 
-  seats: string[]; // ["E2", "E4"]
+  seats: string[];
   amount: number;
 
   createdAt?: Date;

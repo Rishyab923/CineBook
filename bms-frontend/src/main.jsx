@@ -3,11 +3,12 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import App from "./App.jsx";
+import App from "./App";
 import "./index.css";
 
-import { LocationProvider } from "./context/LocationContext.jsx";
-import { SeatProvider } from "./context/SeatContext.jsx";
+import { LocationProvider } from "./context/LocationContext";
+import { SeatProvider } from "./context/SeatContext";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,11 +22,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <LocationProvider>
-          <SeatProvider>
-            <App />
-          </SeatProvider>
-        </LocationProvider>
+        <AuthProvider>
+          <LocationProvider>
+            <SeatProvider>
+              <App />
+            </SeatProvider>
+          </LocationProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>
   </StrictMode>

@@ -9,4 +9,3 @@ export const TheaterSchema = z.object({
 });
 
 export type TheaterInput = z.infer<typeof TheaterSchema>;
-

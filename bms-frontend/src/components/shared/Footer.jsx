@@ -34,7 +34,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <p className="text-center text-xs px-4 max-w-4xl">
-          Copyright 2025 BookMyScreen Pvt Ltd. All Rights Reserved.
+          Copyright 2026 CineBook Pvt Ltd. All Rights Reserved.
           <br />
           <small>
             The content and images used on this site are copyright protected and
