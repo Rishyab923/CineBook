@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken"; // ✅ FIXED IMPORT
 
 interface JwtPayload {
   id: string;
@@ -32,10 +32,9 @@ export const auth: RequestHandler = (
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET as string
     ) as JwtPayload;
 
-    // 🔒 Type-safe cast (NO TS error possible)
     (req as RequestWithUser).user = {
       id: decoded.id,
       email: decoded.email,
