@@ -13,9 +13,9 @@ pipeline {
         GITHUB_REPO  = 'https://github.com/KiranYBPatil/CineBook.git'
     }
 
-    // ─── Auto-trigger on GitHub push ─────
+    // ─── Auto-trigger: check GitHub every 2 min ─
     triggers {
-        githubPush()
+        pollSCM('H/2 * * * *')
     }
 
     stages {
@@ -93,17 +93,14 @@ pipeline {
             steps {
                 echo "🚀 Deploying to EC2 at ${EC2_IP}..."
                 withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    bat """
-                        ssh -o StrictHostKeyChecking=no -i "%SSH_KEY%" %SSH_USER%@${EC2_IP} ^
-                        "cd ${APP_DIR} && ^
-                         git pull origin main && ^
-                         if [ ! -f bms-backend/.env ]; then ^
-                           echo 'Creating .env file...' && ^
-                           printf 'PORT=9000\\nMONGO_CONNECTION_STRING=mongodb://mongo:27017/bookmyscreen\\nJWT_SECRET=cinebook_jwt_secret_2026\\nACCESS_TOKEN_SECRET=cinebook_access_token_secret_2026\\nREFRESH_TOKEN_SECRET=cinebook_refresh_token_secret_2026\\nHASH_SECRET=cinebook_hash_secret_2026\\nFRONTEND_URL=http://${EC2_IP}\\nNODEMAILER_EMAIL=\\nNODEMAILER_PASSWORD=\\n' > bms-backend/.env; ^
-                         fi && ^
-                         docker compose up -d --build && ^
-                         echo '✅ Containers rebuilt and started!'"
-                    """
+                    // Pull latest code
+                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"cd ${APP_DIR} && git pull origin main\""
+
+                    // Create .env if missing
+                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"test -f ${APP_DIR}/bms-backend/.env || echo 'PORT=9000' > ${APP_DIR}/bms-backend/.env\""
+
+                    // Build and start containers
+                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"cd ${APP_DIR} && docker compose up -d --build\""
                 }
             }
         }
