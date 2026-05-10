@@ -72,7 +72,8 @@ const Checkout = () => {
       setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       console.error(error);
-      toast.error("Booking failed");
+      const errorMsg = error.response?.data?.message || error.message || "Booking failed";
+      toast.error(`Booking failed: ${errorMsg}`);
     }
   };
 
