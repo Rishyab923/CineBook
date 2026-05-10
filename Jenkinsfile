@@ -99,6 +99,9 @@ pipeline {
                     // Pull latest code
                     bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"cd ${APP_DIR} && git pull origin main\""
 
+                    // Setup 2GB Swap Space to prevent Out-Of-Memory crashes during build
+                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"sudo fallocate -l 2G /swapfile || true && sudo chmod 600 /swapfile || true && sudo mkswap /swapfile || true && sudo swapon /swapfile || true\""
+
                     // Create .env if missing
                     bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"test -f ${APP_DIR}/bms-backend/.env || echo 'PORT=9000' > ${APP_DIR}/bms-backend/.env\""
 
