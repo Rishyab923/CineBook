@@ -63,32 +63,7 @@ pipeline {
             }
         }
 
-        // ─── 6. Docker Backend Build ─────────
-        stage('Docker Backend Build') {
-            steps {
-                dir('bms-backend') {
-                    bat 'docker build -t cinebook-backend .'
-                }
-            }
-        }
-
-        // ─── 7. Docker Frontend Build ────────
-        stage('Docker Frontend Build') {
-            steps {
-                dir('bms-frontend') {
-                    bat 'docker build -t cinebook-frontend .'
-                }
-            }
-        }
-
-        // ─── 8. Docker Check ─────────────────
-        stage('Docker Images') {
-            steps {
-                bat 'docker images'
-            }
-        }
-
-        // ─── 9. Deploy to AWS EC2 ────────────
+        // ─── 6. Deploy to AWS EC2 ─────────────
         stage('Deploy to EC2') {
             steps {
                 echo "🚀 Deploying to EC2 at ${EC2_IP}..."
@@ -105,7 +80,7 @@ pipeline {
             }
         }
 
-        // ─── 10. Health Check ────────────────
+        // ─── 7. Health Check ─────────────────
         stage('Verify Deployment') {
             steps {
                 echo '🏥 Running health check...'
