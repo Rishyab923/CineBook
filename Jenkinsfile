@@ -7,7 +7,7 @@ pipeline {
 
     // ─── Environment Variables ────────────
     environment {
-        EC2_IP       = '3.27.249.93'
+        EC2_IP       = '32.236.37.142'
         EC2_USER     = 'ubuntu'
         APP_DIR      = '/home/ubuntu/CineBook'
         GITHUB_REPO  = 'https://github.com/KiranYBPatil/CineBook.git'
