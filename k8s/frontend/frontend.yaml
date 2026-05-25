@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: cinebook-frontend
+  namespace: cinebook
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: cinebook-frontend
+
+  template:
+    metadata:
+      labels:
+        app: cinebook-frontend
+
+    spec:
+      containers:
+      - name: frontend
+
+        image: 02fe23bcs129/cinebook-frontend:latest
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 80

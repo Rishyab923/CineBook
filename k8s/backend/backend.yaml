@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: cinebook-backend
+  namespace: cinebook
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: cinebook-backend
+
+  template:
+    metadata:
+      labels:
+        app: cinebook-backend
+
+    spec:
+      containers:
+      - name: backend
+
+        image: 02fe23bcs129/cinebook-backend:latest
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 9000
+
+        env:
+        - name: PORT
+          value: "9000"
+
+        - name: MONGO_CONNECTION_STRING
+          value: "mongodb+srv://CineBook:CineBook@cinebook.0thnkha.mongodb.net/cinebook?retryWrites=true&w=majority&appName=CineBook"
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: cinebook-backend
+  namespace: cinebook
+
+spec:
+  selector:
+    app: cinebook-backend
+
+  ports:
+  - port: 9000
+    targetPort: 9000

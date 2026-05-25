@@ -1,126 +1,81 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS20'
-    }
-
-    // ─── Environment Variables ────────────
     environment {
-        EC2_IP       = '32.236.37.142'
-        EC2_USER     = 'ubuntu'
-        APP_DIR      = '/home/ubuntu/CineBook'
-        GITHUB_REPO  = 'https://github.com/KiranYBPatil/CineBook.git'
-    }
+        DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
 
-    // ─── Auto-trigger: check GitHub every 2 min ─
-    triggers {
-        pollSCM('H/2 * * * *')
+        BACKEND_IMAGE = '02fe23bcs129/cinebook-backend'
+        FRONTEND_IMAGE = '02fe23bcs129/cinebook-frontend'
     }
 
     stages {
 
-        // ─── 1. Checkout ─────────────────────
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main',
+                url: 'https://github.com/KiranYBPatil/CineBook.git'
             }
         }
 
-        // ─── 2. Backend Install ──────────────
-        stage('Backend Install') {
+        stage('Build Backend Image') {
             steps {
-                dir('bms-backend') {
-                    bat 'npm install'
+                script {
+                    docker.build("${BACKEND_IMAGE}:latest", "./bms-backend")
                 }
             }
         }
 
-        // ─── 3. Frontend Install ─────────────
-        stage('Frontend Install') {
+        stage('Build Frontend Image') {
             steps {
-                dir('bms-frontend') {
-                    bat 'npm install'
+                script {
+                    docker.build("${FRONTEND_IMAGE}:latest", "./bms-frontend")
                 }
             }
         }
 
-        // ─── 4. Backend Build ────────────────
-        stage('Backend Build') {
+        stage('Push Backend Image') {
             steps {
-                dir('bms-backend') {
-                    bat 'npm run build'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                        docker.image("${BACKEND_IMAGE}:latest").push()
+                    }
                 }
             }
         }
 
-        // ─── 5. Frontend Build ───────────────
-        stage('Frontend Build') {
+        stage('Push Frontend Image') {
             steps {
-                dir('bms-frontend') {
-                    bat 'npm run build'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                        docker.image("${FRONTEND_IMAGE}:latest").push()
+                    }
                 }
             }
         }
 
-        // ─── 6. Deploy via Ansible ───────────
-        stage('Ansible Deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
-                echo "🚀 Deploying via Ansible to EC2 at ${EC2_IP}..."
-                withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    // Fix Windows SSH key permissions
-                    bat "icacls \"%SSH_KEY%\" /inheritance:r /grant:r \"SYSTEM:(R)\" /grant:r \"Administrators:(R)\""
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
 
-                    // Pull latest code on EC2
-                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"cd ${APP_DIR} && git pull origin main\""
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG_FILE
 
-                    // Run Ansible playbook on EC2 (local connection — Ansible provisions + deploys)
-                    bat "ssh -o StrictHostKeyChecking=no -i \"%SSH_KEY%\" %SSH_USER%@${EC2_IP} \"cd ${APP_DIR} && ansible-playbook ansible/deploy.yml -i ansible/inventory.ini\""
+                    kubectl rollout restart deployment cinebook-backend -n cinebook
+
+                    kubectl rollout restart deployment cinebook-frontend -n cinebook
+                    '''
                 }
-            }
-        }
-
-        // ─── 7. Health Check ─────────────────
-        stage('Verify Deployment') {
-            steps {
-                echo '🏥 Running health check...'
-                bat """
-                    @echo off
-                    setlocal
-                    set RETRIES=0
-                    :LOOP
-                    set /a RETRIES+=1
-                    if %RETRIES% GTR 12 (
-                        echo ❌ Health check failed after 12 attempts!
-                        exit /b 1
-                    )
-                    echo Attempt %RETRIES%/12 - Checking http://${EC2_IP}/api/v1/movies ...
-                    curl -s -o nul -w "%%{http_code}" http://${EC2_IP}/api/v1/movies | findstr "200" >nul
-                    if errorlevel 1 (
-                        echo Waiting 10 seconds...
-                        timeout /t 10 /nobreak >nul
-                        goto LOOP
-                    )
-                    echo ✅ Backend is healthy!
-                """
             }
         }
     }
 
     post {
         success {
-            echo """
-            ════════════════════════════════════════════
-            ✅ PIPELINE SUCCESS — CineBook Deployed!
-            🌐 Frontend:  http://${EC2_IP}
-            🔧 API:       http://${EC2_IP}/api/v1
-            🤖 Deployed via: Ansible
-            ════════════════════════════════════════════
-            """
+            echo '✅ CineBook deployed successfully to Kubernetes!'
         }
 
         failure {
-            echo '❌ Pipeline FAILED! Check the logs above.'
+            echo '❌ Pipeline failed!'
         }
     }
 }

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: cinebook-backend
+  namespace: cinebook
+
+spec:
+  selector:
+    app: cinebook-backend
+
+  ports:
+  - port: 9000
+    targetPort: 9000
