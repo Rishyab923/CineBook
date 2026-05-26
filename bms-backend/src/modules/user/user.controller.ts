@@ -46,14 +46,14 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-  {
-    id: user._id,
-    email: user.email,
-    username: user.username, // ✅ REQUIRED
-  },
-  process.env.JWT_SECRET!,
-  { expiresIn: "7d" }
-);
+      {
+        id: user._id.toString(),
+        email: user.email,
+        username: user.username,
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: "7d" }
+    );
 
 
     res.json({ success: true, token });
@@ -62,6 +62,7 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Login failed",
+      error: error.message || String(error),
     });
   }
 };
