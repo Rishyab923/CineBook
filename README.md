@@ -62,3 +62,5 @@ The CineBook booking system is fully configured with automated DevOps CI/CD pipe
 Last Updated: May 26, 2026 (DevOps & CI/CD Pipeline Demo)
 
 Chore: minor README formatting tweak (no functional change).
+
+Chore: second minor tweak for push (no functional change).
