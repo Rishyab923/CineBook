@@ -47,17 +47,22 @@ const Seat = ({
           time: showData.startTime,
         });
       }}
-      className={`w-9 h-9 m-[2px] rounded-lg border text-sm
+      className={`w-10 h-10 m-[3px] rounded-xl border text-sm font-semibold transition-all duration-300
         ${
           isBooked
-            ? "bg-gray-400 text-white cursor-not-allowed"
-            : "hover:bg-gray-100 cursor-pointer"
+            ? "bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700 opacity-60"
+            : "bg-[#1b1b2d] border-[#3a3a5a] text-gray-200 hover:border-purple-500 hover:bg-purple-500/20 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/20"
         }
-        ${isSelected ? "bg-purple-600 text-white" : ""}
+
+        ${
+          isSelected
+            ? "bg-gradient-to-br from-purple-600 to-pink-500 text-white border-purple-400 scale-110 shadow-xl shadow-purple-500/40"
+            : ""
+        }
       `}
       title={isBooked ? "Seat already booked" : "Available"}
     >
-      {isBooked ? "X" : seat.number}
+      {isBooked ? "✕" : seat.number}
     </button>
   );
 };
@@ -84,7 +89,7 @@ const SeatLayout = () => {
     });
   });
 
-  /* ✅ GROUP BY CATEGORY (NO GUESSING) */
+  /* ✅ GROUP BY CATEGORY */
   const groupedSeats = {};
   showData?.seatLayout.forEach((rowObj) => {
     const category = rowObj.category;
@@ -101,7 +106,11 @@ const SeatLayout = () => {
   });
 
   if (isLoading) {
-    return <div className="p-6">Loading seats...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#070B14] text-purple-400 text-lg animate-pulse">
+        Loading seats...
+      </div>
+    );
   }
 
   const handleProceed = () => {
@@ -109,34 +118,54 @@ const SeatLayout = () => {
       alert("Select at least one seat!");
       return;
     }
+
     navigate(`/shows/${showId}/${state}/checkout`);
   };
 
   return (
-    <div className="h-screen overflow-hidden bg-white">
-      <div className="fixed top-0 left-0 w-full z-10">
+    <div className="h-screen overflow-hidden bg-[#070B14] text-white relative">
+      {/* Background Glow Effects */}
+      <div className="absolute top-[-150px] left-[-100px] w-[350px] h-[350px] bg-purple-600/20 blur-[140px] rounded-full"></div>
+      <div className="absolute bottom-[-120px] right-[-80px] w-[320px] h-[320px] bg-pink-500/20 blur-[140px] rounded-full"></div>
+
+      {/* Header */}
+      <div className="fixed top-0 left-0 w-full z-20">
         <Header showData={showData} />
       </div>
 
-      <div className="max-w-7xl mx-auto mt-[210px] px-6 pb-4 h-[calc(100vh-320px)] overflow-y-scroll">
+      {/* Seat Layout */}
+      <div className="relative z-10 max-w-7xl mx-auto mt-[210px] px-6 pb-8 h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
         <div className="flex flex-col items-center">
           {Object.entries(groupedSeats).map(
             ([category, { price, rows }]) => (
-              <div key={category} className="mb-12 w-full text-center">
-                <h2 className="font-semibold text-lg mb-4">
-                  {category} : ₹{price}
+              <div
+                key={category}
+                className="mb-14 w-full text-center bg-white/[0.03] border border-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl"
+              >
+                {/* Category */}
+                <h2 className="font-bold text-2xl mb-6 tracking-wide">
+                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                    {category}
+                  </span>
+
+                  <span className="text-gray-400 text-lg ml-2">
+                    • ₹{price}
+                  </span>
                 </h2>
 
+                {/* Rows */}
                 {rows.map((rowObj) => (
                   <div
                     key={rowObj.row}
-                    className="flex items-center justify-center mb-2"
+                    className="flex items-center justify-center mb-3"
                   >
-                    <div className="w-6 mr-2 text-sm text-gray-600">
+                    {/* Row Label */}
+                    <div className="w-8 mr-4 text-sm font-bold text-purple-300">
                       {rowObj.row}
                     </div>
 
-                    <div className="flex gap-1">
+                    {/* Seats */}
+                    <div className="flex gap-[2px] flex-wrap justify-center">
                       {rowObj.seats.map((seat) => (
                         <Seat
                           key={seat.number}
@@ -157,20 +186,33 @@ const SeatLayout = () => {
           )}
         </div>
 
-        <div className="flex justify-center mt-6">
-          <img src={screenImg} alt="Screen" className="w-[400px]" />
+        {/* Screen */}
+        <div className="flex justify-center mt-10 mb-8 relative">
+          <div className="absolute bottom-0 w-[420px] h-16 bg-cyan-400/20 blur-3xl rounded-full"></div>
+
+          <img
+            src={screenImg}
+            alt="Screen"
+            className="w-[420px] opacity-90 drop-shadow-[0_0_35px_rgba(34,211,238,0.45)]"
+          />
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full h-[100px] bg-white border-t px-6 py-4 flex justify-between items-center">
-        <p className="font-medium text-gray-700">
-          {selectedSeats.length} Selected
-        </p>
+      {/* Bottom Bar */}
+      <div className="fixed bottom-0 left-0 w-full h-[100px] bg-[#0f172a]/90 backdrop-blur-2xl border-t border-white/10 px-8 py-4 flex justify-between items-center z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.6)]">
+        <div>
+          <p className="text-sm text-gray-400">Selected Seats</p>
+
+          <h2 className="text-2xl font-bold text-white">
+            {selectedSeats.length}
+          </h2>
+        </div>
+
         <button
           onClick={handleProceed}
-          className="bg-black text-white px-6 py-2 rounded-lg font-semibold"
+          className="bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 px-8 py-3 rounded-2xl text-white font-bold text-lg shadow-2xl shadow-purple-500/30 hover:scale-105 hover:shadow-purple-500/50 transition-all duration-300"
         >
-          Proceed
+          Proceed →
         </button>
       </div>
 

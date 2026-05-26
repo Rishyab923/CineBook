@@ -35,7 +35,7 @@ const Home = () => {
             transition-all duration-300 ease-out
 
             hover:-translate-y-0.5
-            hover:shadow-lg
+            hover:shadow-lg hover:shadow-purple-200
             hover:border-purple-300
             hover:bg-white
 
@@ -46,7 +46,6 @@ const Home = () => {
             focus:ring-2 focus:ring-purple-400 focus:ring-offset-2
           "
         >
-          {/* ✨ Gradient glow ring */}
           <span
             className="
               absolute inset-0 rounded-full
@@ -57,7 +56,6 @@ const Home = () => {
             "
           />
 
-          {/* 🎟️ Icon */}
           <span
             className="
               relative text-lg
@@ -68,7 +66,6 @@ const Home = () => {
             🎟️
           </span>
 
-          {/* Text */}
           <span className="relative">
             My Bookings
           </span>
@@ -79,9 +76,11 @@ const Home = () => {
           onClick={handleAskAI}
           className="
             flex items-center gap-2 px-6 py-2
-            bg-gradient-to-r from-purple-700 to-pink-600
+            bg-gradient-to-r from-purple-600 to-pink-500
             text-white font-semibold rounded-full
-            shadow-lg hover:scale-105 hover:shadow-xl transition
+            shadow-lg shadow-purple-300/40
+            hover:scale-105 hover:shadow-xl hover:shadow-purple-300/50
+            transition-all duration-300
           "
         >
           🤖 ASK AI

@@ -33,7 +33,7 @@ const Movies = () => {
     <div>
       <BannerSlider />
 
-      <div className="flex flex-col md:flex-row bg-[#f5f5f5] min-h-screen md:px-[100px] pb-10 pt-8">
+      <div className="flex flex-col md:flex-row bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/30 min-h-screen md:px-[100px] pb-10 pt-8">
         <MovieFilters />
         <MovieList allMovies={allMovies} />
       </div>

@@ -78,16 +78,16 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-purple-50 p-6">
-      <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-xl space-y-4">
-        <h2 className="text-2xl font-bold text-center text-purple-700">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-50 to-white p-6">
+      <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-[0_20px_60px_rgba(139,92,246,0.15)] space-y-4 border border-purple-100">
+        <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
           Payment Details
         </h2>
 
         {/* MOBILE NUMBER */}
         <input
           placeholder="Mobile Number (10 digits)"
-          className="w-full p-3 border rounded-xl"
+          className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200"
           value={user.phone}
           onChange={(e) =>
             setUser({
@@ -101,7 +101,7 @@ const Checkout = () => {
         {/* UPI ID */}
         <input
           placeholder="UPI ID (eg: name@upi)"
-          className="w-full p-3 border rounded-xl"
+          className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200"
           value={user.upi}
           onChange={(e) =>
             setUser({ ...user, upi: e.target.value })
@@ -110,7 +110,7 @@ const Checkout = () => {
 
         <button
           onClick={handlePayment}
-          className="w-full py-3 bg-purple-700 text-white rounded-xl font-bold hover:bg-purple-800 transition"
+          className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl font-bold shadow-lg shadow-purple-300/40 hover:shadow-xl hover:shadow-purple-400/50 hover:scale-[1.02] transition-all duration-300"
         >
           Pay ₹{totalAmount}
         </button>

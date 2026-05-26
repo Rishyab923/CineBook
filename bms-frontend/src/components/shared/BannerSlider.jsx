@@ -5,7 +5,7 @@ import { banners } from "../../utils/constants";
 const BannerSlider = () => {
   const settings = {
     centerMode: true,
-    centerPadding: "200px", // ⬅️ reduced for wider banners
+    centerPadding: "200px",
     slidesToShow: 1,
     infinite: true,
     autoplay: true,
@@ -31,18 +31,17 @@ const BannerSlider = () => {
   };
 
   return (
-    <div className="w-full bg-white py-6">
+    <div className="w-full bg-gradient-to-b from-white to-purple-50/20 py-6">
       <div className="mx-auto px-4">
         <Slider {...settings}>
           {banners.map((banner, i) => (
             <div key={i} className="px-3">
               
-              {/* ASPECT RATIO CONTAINER */}
-              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-lg">
+              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-xl shadow-purple-200/30 transition-shadow duration-300 hover:shadow-2xl hover:shadow-purple-300/40">
                 <img
                   src={banner}
                   alt={`banner-${i}`}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
               </div>
 

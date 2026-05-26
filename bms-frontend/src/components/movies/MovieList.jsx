@@ -3,7 +3,6 @@ import { languages } from "../../utils/constants";
 import MovieCard from "./MovieCard";
 
 const MovieList = ({ allMovies = [] }) => {
-  // Safety check (in case backend sends wrong data)
   const movies = Array.isArray(allMovies) ? allMovies : [];
 
   return (
@@ -13,7 +12,7 @@ const MovieList = ({ allMovies = [] }) => {
         {languages.map((lang, i) => (
           <span
             key={i}
-            className="bg-white border border-gray-200 text-[#f74362] py-1 px-3 rounded-[24px] text-sm cursor-pointer hover:bg-gray-100"
+            className="bg-white border border-gray-200 text-purple-600 py-1.5 px-4 rounded-full text-sm cursor-pointer hover:bg-purple-50 hover:border-purple-300 transition-all duration-200 shadow-sm"
           >
             {lang}
           </span>
@@ -21,11 +20,11 @@ const MovieList = ({ allMovies = [] }) => {
       </div>
 
       {/* Coming Soon */}
-      <div className="flex justify-between items-center bg-white px-6 py-6 rounded mb-6">
-        <h3 className="font-semibold text-xl">Coming Soon</h3>
+      <div className="flex justify-between items-center bg-white/80 backdrop-blur-sm px-6 py-6 rounded-xl mb-6 shadow-sm border border-gray-100">
+        <h3 className="font-bold text-xl text-gray-800">Coming Soon</h3>
         <a
           href="#"
-          className="text-red-500 text-sm font-medium flex items-center"
+          className="text-purple-600 text-sm font-semibold flex items-center hover:text-purple-800 transition-colors"
         >
           Explore Upcoming Movies <span className="ml-1">→</span>
         </a>

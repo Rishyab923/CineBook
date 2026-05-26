@@ -18,48 +18,67 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,       // Dynamically allow EC2 IP or any domain
 ].filter(Boolean) as string[];
 
-const corsOptions: cors.CorsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests with no origin (Postman, server-to-server, same-origin via proxy)
-    if (!origin) return callback(null, true);
+// Dynamic CORS configuration function to handle same-origin, EC2, and local scenarios
+app.use(
+  cors((req, callback) => {
+    const origin = req.header("Origin");
+    const host = req.header("Host");
+    const forwardedHost = req.header("X-Forwarded-Host");
 
-    // Allow explicitly listed origins
-    if (allowedOrigins.includes(origin)) return callback(null, true);
+    let isAllowed = false;
 
-    // Allow Render deployments
-    if (origin.endsWith(".onrender.com")) return callback(null, true);
+    if (!origin) {
+      // Allow requests with no origin (Postman, same-origin server requests)
+      isAllowed = true;
+    } else {
+      try {
+        const url = new URL(origin);
 
-    // Allow any HTTP origin on the same host (handles reverse proxy / EC2 IP scenarios)
-    // This is safe because the backend is not publicly exposed — only nginx port 80 is
-    try {
-      const url = new URL(origin);
-      // Check against FRONTEND_URL hostname
-      if (process.env.FRONTEND_URL) {
-        const frontendUrl = new URL(process.env.FRONTEND_URL);
-        if (url.hostname === frontendUrl.hostname) {
-          return callback(null, true);
+        // 1. Allow explicitly listed origins
+        if (allowedOrigins.includes(origin)) {
+          isAllowed = true;
         }
+        // 2. Allow same-origin requests served via local host or reverse proxy
+        else if (host && url.host === host) {
+          isAllowed = true;
+        }
+        // 3. Allow same-origin requests served via forwarded proxy host (e.g. Nginx on EC2)
+        else if (forwardedHost && url.host === forwardedHost) {
+          isAllowed = true;
+        }
+        // 4. Allow AWS EC2 public DNS/Amazon domains
+        else if (url.hostname.endsWith(".amazonaws.com")) {
+          isAllowed = true;
+        }
+        // 5. Allow Render deployments
+        else if (url.hostname.endsWith(".onrender.com")) {
+          isAllowed = true;
+        }
+        // 6. Accept any IP-based HTTP origin (handles direct EC2 IP access)
+        else if (/^\d+\.\d+\.\d+\.\d+$/.test(url.hostname)) {
+          isAllowed = true;
+        }
+      } catch (_) {
+        // ignore URL parse errors
       }
-      // Also accept any IP-based HTTP origin (for EC2 deployments where FRONTEND_URL may be unset)
-      if (/^\d+\.\d+\.\d+\.\d+$/.test(url.hostname)) {
-        return callback(null, true);
-      }
-    } catch (_) {
-      // ignore URL parse errors
     }
 
-    console.log("CORS Rejected:", origin, "| Allowed:", allowedOrigins);
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+    if (isAllowed) {
+      callback(null, {
+        origin: true, // Reflect the request origin back to the client
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+      });
+    } else {
+      console.log("CORS Rejected:", origin, "| Allowed:", allowedOrigins);
+      callback(new Error("Not allowed by CORS"));
+    }
+  })
+);
 
-app.use(cors(corsOptions));
-
-// ✅ Handle ALL preflight requests with same CORS config
-app.options("{*path}", cors(corsOptions));
+// ✅ Handle ALL preflight requests with same CORS config across-the-board
+app.options("*any", cors());
 
 app.use(cookieParser());
 app.use(express.json());
