@@ -17,7 +17,7 @@ router.use("/user", userRoutes); // ✅ ADD THIS
 
 // ─── Version endpoint ───────────────────────────────
 router.get("/version", (_req: Request, res: Response) => {
-  let version = "1.1.0"; // default fallback
+  let version = "1.2.0"; // default fallback
 
   // Try reading VERSION file (written by Jenkins during deployment)
   try {

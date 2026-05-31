@@ -26,24 +26,24 @@ const Home = () => {
             flex items-center gap-2
             px-6 py-2.5
             rounded-full
-            font-semibold text-purple-700
+            font-semibold text-purple-700 dark:text-purple-300
 
-            bg-white/80 backdrop-blur
-            border border-purple-200
+            bg-white/80 dark:bg-gray-800/80 backdrop-blur
+            border border-purple-200 dark:border-purple-700
 
             shadow-sm
             transition-all duration-300 ease-out
 
             hover:-translate-y-0.5
-            hover:shadow-lg hover:shadow-purple-200
-            hover:border-purple-300
-            hover:bg-white
+            hover:shadow-lg hover:shadow-purple-200 dark:hover:shadow-purple-900
+            hover:border-purple-300 dark:hover:border-purple-500
+            hover:bg-white dark:hover:bg-gray-700
 
             active:translate-y-0
             active:scale-95
 
             focus:outline-none
-            focus:ring-2 focus:ring-purple-400 focus:ring-offset-2
+            focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900
           "
         >
           <span
@@ -78,8 +78,8 @@ const Home = () => {
             flex items-center gap-2 px-6 py-2
             bg-gradient-to-r from-purple-600 to-pink-500
             text-white font-semibold rounded-full
-            shadow-lg shadow-purple-300/40
-            hover:scale-105 hover:shadow-xl hover:shadow-purple-300/50
+            shadow-lg shadow-purple-300/40 dark:shadow-purple-900/40
+            hover:scale-105 hover:shadow-xl hover:shadow-purple-300/50 dark:hover:shadow-purple-900/50
             transition-all duration-300
           "
         >

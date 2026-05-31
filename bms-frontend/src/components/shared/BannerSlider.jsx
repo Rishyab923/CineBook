@@ -31,13 +31,13 @@ const BannerSlider = () => {
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-white to-purple-50/20 py-6">
+    <div className="w-full bg-gradient-to-b from-white to-purple-50/20 dark:from-gray-900 dark:to-gray-900 py-6 transition-colors duration-300">
       <div className="mx-auto px-4">
         <Slider {...settings}>
           {banners.map((banner, i) => (
             <div key={i} className="px-3">
               
-              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-xl shadow-purple-200/30 transition-shadow duration-300 hover:shadow-2xl hover:shadow-purple-300/40">
+              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-xl shadow-purple-200/30 dark:shadow-gray-900/50 transition-shadow duration-300 hover:shadow-2xl hover:shadow-purple-300/40 dark:hover:shadow-purple-900/40">
                 <img
                   src={banner}
                   alt={`banner-${i}`}

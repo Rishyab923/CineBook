@@ -4,7 +4,7 @@ import { events } from "../utils/constants";
 const LiveEvents = () => {
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
-      <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+      <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
         The Best Of Live Events
       </h2>
 
@@ -12,7 +12,7 @@ const LiveEvents = () => {
         {events.map((event, i) => (
           <div
             key={i}
-            className="rounded-xl overflow-hidden relative group shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-purple-200/40"
+            className="rounded-xl overflow-hidden relative group shadow-md dark:shadow-gray-800/50 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-purple-200/40 dark:hover:shadow-purple-900/40"
           >
             <img
               src={event.img}

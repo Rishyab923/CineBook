@@ -5,6 +5,15 @@ All notable changes to CineBook will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-31
+
+### Added
+- 🌙 **Dark Mode Toggle** — sun/moon switch in the header with smooth transitions
+- 🎨 Dark theme for all pages: Home, Movies, Movie Details, Profile, Login, Signup
+- 🎨 Dark theme for all components: Header, Footer, BannerSlider, Recommended, LiveEvents, MovieCard, MovieFilters, MovieList, TheaterTimings
+- 💾 Theme preference persisted in localStorage
+- 🧩 New `ThemeContext` provider for app-wide dark mode state management
+
 ## [1.1.0] - 2026-05-31
 
 ### Added

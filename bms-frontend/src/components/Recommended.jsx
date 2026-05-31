@@ -26,7 +26,7 @@ const Recommended = () => {
   });
 
   if (isLoading) {
-    return <p className="text-center py-10 text-gray-500 animate-pulse">Loading movies...</p>;
+    return <p className="text-center py-10 text-gray-500 dark:text-gray-400 animate-pulse">Loading movies...</p>;
   }
 
   if (isError) {
@@ -39,23 +39,23 @@ const Recommended = () => {
     [];
 
   return (
-    <div className="w-full py-6 bg-gradient-to-b from-white to-purple-50/10">
+    <div className="w-full py-6 bg-gradient-to-b from-white to-purple-50/10 dark:from-gray-900 dark:to-gray-900 transition-colors duration-300">
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
             Recommended Movies
           </h2>
 
           <span
             onClick={() => navigate("/movies")}
-            className="text-md text-purple-600 cursor-pointer hover:text-purple-800 font-medium transition-colors"
+            className="text-md text-purple-600 dark:text-purple-400 cursor-pointer hover:text-purple-800 dark:hover:text-purple-300 font-medium transition-colors"
           >
             See All →
           </span>
         </div>
 
         {movies.length === 0 ? (
-          <p className="text-center text-gray-500">
+          <p className="text-center text-gray-500 dark:text-gray-400">
             No movies available
           </p>
         ) : (
@@ -64,7 +64,7 @@ const Recommended = () => {
               <div
                 key={movie._id}
                 onClick={() => handleNavigate(movie)}
-                className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-200/50 shadow-md"
+                className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-200/50 dark:hover:shadow-purple-900/50 shadow-md dark:shadow-gray-800/50"
               >
                 <img
                   src={movie.posterUrl}
@@ -77,11 +77,11 @@ const Recommended = () => {
                   <span>{movie.votes} Votes</span>
                 </div>
 
-                <div className="px-2 py-1 bg-white">
-                  <h3 className="font-semibold text-lg text-gray-800">
+                <div className="px-2 py-1 bg-white dark:bg-gray-800 transition-colors duration-300">
+                  <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
                     {movie.title}
                   </h3>
-                  <p className="text-md text-gray-500">
+                  <p className="text-md text-gray-500 dark:text-gray-400">
                     {movie.genre.join(" | ")}
                   </p>
                 </div>

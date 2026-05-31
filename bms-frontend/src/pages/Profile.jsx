@@ -121,17 +121,17 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg font-semibold text-gray-500 animate-pulse">Loading your bookings...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 transition-colors duration-300">
+        <p className="text-lg font-semibold text-gray-500 dark:text-gray-400 animate-pulse">Loading your bookings...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/30 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-6 transition-colors duration-300">
       {/* PROFILE HEADER */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-purple-200/30 p-6 mb-8 flex justify-between items-center border border-purple-100">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-purple-200/30 dark:shadow-gray-900/50 p-6 mb-8 flex justify-between items-center border border-purple-100 dark:border-gray-700 transition-colors duration-300">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
           👋 Hi, {user?.username}
         </h2>
 
@@ -144,11 +144,11 @@ export default function Profile() {
       </div>
 
       {/* BOOKINGS */}
-      <h3 className="text-xl font-bold mb-4 text-gray-800">My Bookings</h3>
+      <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">My Bookings</h3>
 
       {bookings.length === 0 ? (
-        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center border border-purple-100">
-          <p className="text-lg text-gray-500">
+        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center border border-purple-100 dark:border-gray-700 transition-colors duration-300">
+          <p className="text-lg text-gray-500 dark:text-gray-400">
             You have not booked any tickets yet 🎬
           </p>
         </div>
@@ -157,22 +157,22 @@ export default function Profile() {
           {bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-purple-200/20 p-6 space-y-2 border border-purple-100 transition-all duration-300 hover:shadow-xl hover:shadow-purple-200/40"
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-purple-200/20 dark:shadow-gray-900/50 p-6 space-y-2 border border-purple-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-purple-200/40 dark:hover:shadow-purple-900/30"
             >
-              <h3 className="text-xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                 🎥 {booking.movie?.title}
               </h3>
 
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 👤 <strong>{booking.user.username}</strong> (
                 {booking.user.email})
               </p>
 
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 📍 <strong>Theater:</strong> {booking.theater?.name}
               </p>
 
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 📅 <strong>Date:</strong> {booking.showDate} (
                 {new Date(booking.showDate).toLocaleDateString("en-IN", {
                   weekday: "long",
@@ -180,15 +180,15 @@ export default function Profile() {
                 )
               </p>
 
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 ⏰ <strong>Show Time:</strong> {booking.showTime}
               </p>
 
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 💺 <strong>Seats:</strong> {booking.seats.join(", ")}
               </p>
 
-              <p className="text-lg font-bold text-purple-700">
+              <p className="text-lg font-bold text-purple-700 dark:text-purple-400">
                 💰 Total Paid: ₹{booking.amount}
               </p>
 

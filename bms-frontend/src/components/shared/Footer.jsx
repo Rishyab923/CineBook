@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import mainLogo from "../../assets/main-icon-white.png";
 
-const APP_VERSION = "v1.1.0";
+const APP_VERSION = "v1.2.0";
 
 const Footer = () => {
   return (

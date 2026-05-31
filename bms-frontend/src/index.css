@@ -3,9 +3,14 @@
 @import "slick-carousel/slick/slick-theme.css";
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 
 .scrollbar-hide {
   scrollbar-width: none;

@@ -32,7 +32,7 @@ const TheaterTimings = ({ movieId }) => {
   });
 
   if (isLoading) {
-    return <p className="text-center py-6 text-gray-500 animate-pulse">Loading shows...</p>;
+    return <p className="text-center py-6 text-gray-500 dark:text-gray-400 animate-pulse">Loading shows...</p>;
   }
 
   if (isError) {
@@ -44,8 +44,8 @@ const TheaterTimings = ({ movieId }) => {
   }
 
   return (
-    <>
-      <hr className="my-2 border-gray-200" />
+    <div className="bg-white dark:bg-gray-900 transition-colors duration-300">
+      <hr className="my-2 border-gray-200 dark:border-gray-700" />
 
       {/* Date Selector */}
       <div className="flex items-center gap-2 mb-4 overflow-x-auto py-4 px-2">
@@ -58,8 +58,8 @@ const TheaterTimings = ({ movieId }) => {
               onClick={() => setSelectedDate(date)}
               className={`flex flex-col items-center px-3 py-2 rounded-xl min-w-[50px] border transition-all duration-200 ${
                 isSelected
-                  ? "bg-gradient-to-b from-purple-600 to-pink-500 text-white font-bold shadow-lg shadow-purple-300/30 scale-105"
-                  : "text-gray-600 hover:bg-purple-50 hover:border-purple-200 border-gray-200"
+                  ? "bg-gradient-to-b from-purple-600 to-pink-500 text-white font-bold shadow-lg shadow-purple-300/30 dark:shadow-purple-900/30 scale-105"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-200 dark:hover:border-purple-600 border-gray-200 dark:border-gray-700"
               }`}
             >
               <span className="text-sm font-black">{date.format("D")}</span>
@@ -75,7 +75,7 @@ const TheaterTimings = ({ movieId }) => {
       {/* Theater List */}
       <div className="space-y-8 px-4 mb-10">
         {showData?.length === 0 && (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-gray-500 dark:text-gray-400">
             No shows available for selected date.
           </div>
         )}
@@ -90,10 +90,10 @@ const TheaterTimings = ({ movieId }) => {
                 className="w-8 h-8 object-contain rounded-lg"
               />
               <div>
-                <p className="font-bold text-gray-800">
+                <p className="font-bold text-gray-800 dark:text-gray-100">
                   {curr.theater.theaterDetails.name}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {curr.theater.theaterDetails.cancellation}
                 </p>
               </div>
@@ -110,25 +110,25 @@ const TheaterTimings = ({ movieId }) => {
                   <button 
                   onClick = {() => navigate(`/movies/${movieId}/${movieName}/${location}/theater/${theaterId}/show/${slot._id}/seat-layout`)}
                   key={i}
-                  className="border hover:bg-purple-50 hover:border-purple-300 border-gray-200 rounded-[16px] px-12 py-2 text-sm flex flex-col items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="border hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-500 border-gray-200 dark:border-gray-700 rounded-[16px] px-12 py-2 text-sm flex flex-col items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-gray-800/50"
                 >
-                  <span className="leading-tight font-semibold text-gray-700">
+                  <span className="leading-tight font-semibold text-gray-700 dark:text-gray-200">
                     {slot.startTime}
                   </span>
-                  <span className="text-[10px] text-gray-400 font-black">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-black">
                     {slot.audioType.toUpperCase()}
                   </span>
                 </button>
                 )
                }
 
-                
+                 
               )}
             </div>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
